@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-double square(double input_1,double input_2)//ºâ¥X¨â¼Æ¥­¤èªº®t¶Z
+double square(double input_1,double input_2)//ç®—å‡ºå…©æ•¸å¹³æ–¹çš„å·®è·
 
 {
     return (input_1 - input_2)*(input_1 - input_2);
@@ -14,20 +14,20 @@ int main()
     int node_count;
     int repeated_count;
     double node_value[100];
-    double coordinate[100][2];//[][0]¦sx­È,[][1]¦sy­È
+    double coordinate[100][2];//[][0]å­˜xå€¼,[][1]å­˜yå€¼
     double weighted;
     double neighbor_count[100];
     double outcomes[100];
-    int link[100][100];//§PÂ_¨âÂI¬O¤£¬Oneighbor
+    int link[100][100];//åˆ¤æ–·å…©é»æ˜¯ä¸æ˜¯neighbor
     int node_position;
     int current_position;
     scanf("%d %d",&node_count,&repeated_count);
-    for(int count=0;count<node_count;count++)//§â¨C­Ónodeªº¸ê®ÆÅª¤J
+    for(int count=0;count<node_count;count++)//æŠŠæ¯å€‹nodeçš„è³‡æ–™è®€å…¥
     {
         scanf("%d",&node_position);
         scanf("%lf %lf %lf",&coordinate[node_position][0],&coordinate[node_position][1],&node_value[node_position]);
     }
-    for(current_position=0;current_position<node_count;current_position++)//ºâ¨C­ÓÂIªºneighbor¼Æ
+    for(current_position=0;current_position<node_count;current_position++)//ç®—æ¯å€‹é»çš„neighboræ•¸
     {
         for(node_position=0;node_position<node_count;node_position++)
         {
@@ -36,8 +36,8 @@ int main()
                 continue;
             }
             double square_sum = 0;
-            square_sum = square_sum + square(coordinate[current_position][0],coordinate[node_position][0]) + square(coordinate[current_position][1],coordinate[node_position][1]);//ºâ¥X¶ZÂ÷¥­¤è
-            if(square_sum<1)//¦pªG¶ZÂ÷¥­¤è<1,¥Nªí©¼¦¹¬O¾F©~
+            square_sum = square_sum + square(coordinate[current_position][0],coordinate[node_position][0]) + square(coordinate[current_position][1],coordinate[node_position][1]);//ç®—å‡ºè·é›¢å¹³æ–¹
+            if(square_sum<1)//å¦‚æœè·é›¢å¹³æ–¹<1,ä»£è¡¨å½¼æ­¤æ˜¯é„°å±…
             {
                 link[current_position][node_position] = 1;
                 neighbor_count[current_position]++;
@@ -45,23 +45,23 @@ int main()
         }
     }
     printf("%d %d\n",node_count,repeated_count);
-    for(int current=0;current<node_count;current++)//¥ı¦L¥»¨Ó¦s¶i¥hªº­È
+    for(int current=0;current<node_count;current++)//å…ˆå°æœ¬ä¾†å­˜é€²å»çš„å€¼
     {
         printf("%.2lf ",node_value[current]);
     }
     for(int round = 1;round<repeated_count;round++)
     {
-        for(current_position=0;current_position<node_count;current_position++)//¨C¦¬ÀÄ¤@¦¸
+        for(current_position=0;current_position<node_count;current_position++)//æ¯æ”¶æ–‚ä¸€æ¬¡
         {
             double temp_outcome = 0;
             double self_weighted = 1;
             for(node_position=0;node_position<node_count;node_position++)
             {
-                if(link[current_position][node_position]==0)//¤£¬O¾F©~ OR ºâ¨ì¦Û¤v
+                if(link[current_position][node_position]==0)//ä¸æ˜¯é„°å±… OR ç®—åˆ°è‡ªå·±
                 {
                     continue;
                 }
-                if(neighbor_count[current_position]>neighbor_count[node_position])//¬O¾F©~ªº¸Ü¤~·|¶i³o­Óif,¥H¾F©~¼Æ¦hªº¨º­ÓÂI¨Ó¨M©wÅv­«
+                if(neighbor_count[current_position]>neighbor_count[node_position])//æ˜¯é„°å±…çš„è©±æ‰æœƒé€²é€™å€‹if,ä»¥é„°å±…æ•¸å¤šçš„é‚£å€‹é»ä¾†æ±ºå®šæ¬Šé‡
                 {
                     weighted =1/(2*(neighbor_count[current_position]));
                 }
@@ -69,20 +69,20 @@ int main()
                 {
                     weighted =1/(2*(neighbor_count[node_position]));
                 }
-                self_weighted = self_weighted - weighted;//¦Û¤v¹ï¦Û¤vªºÅv­«
+                self_weighted = self_weighted - weighted;//è‡ªå·±å°è‡ªå·±çš„æ¬Šé‡
                 temp_outcome = temp_outcome + node_value[node_position] * weighted;
             }
             temp_outcome = temp_outcome + node_value[current_position] * self_weighted;
             outcomes[current_position] = temp_outcome;
         }
-        for(int current=0;current<node_count;current++)//§â¥»¨Óªº­È§ó§ï¦¨·sªº­È
+        for(int current=0;current<node_count;current++)//æŠŠæœ¬ä¾†çš„å€¼æ›´æ”¹æˆæ–°çš„å€¼
         {
             node_value[current] = outcomes[current];
         }
         for(int current=0;current<node_count;current++)
         {
             printf("%.2lf",node_value[current]);
-            if(round!=(repeated_count-1) || current!=(node_count-1))//°µ³Ì«á¤@¦¸¦¬ÀÄªº®É¡A³Ì«á¤@­Ó­È«á­±¨S¦³ªÅ®æ
+            if(round!=(repeated_count-1) || current!=(node_count-1))//åšæœ€å¾Œä¸€æ¬¡æ”¶æ–‚çš„æ™‚ï¼Œæœ€å¾Œä¸€å€‹å€¼å¾Œé¢æ²’æœ‰ç©ºæ ¼
             {
                 printf(" ");
             }
